@@ -1,7 +1,5 @@
 package example;
-
 import org.apache.commons.lang3.RandomStringUtils;
-
 public class CourierDataGenerator {
     public static Courier getRandom(){
         final String login = RandomStringUtils.randomAlphabetic(10);

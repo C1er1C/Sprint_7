@@ -7,17 +7,15 @@ import example.CourierLogin;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.IsEqual.equalTo;
 import io.qameta.allure.junit4.DisplayName;
 
 public class CourierLoginTest {
     private Courier courier;
-
     @Before
     public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+        RestAssured.baseURI = ApiSteps.baseURL;
         courier = CourierDataGenerator.getRandom();
         ApiSteps.createNewCourier(courier);
     }
@@ -27,9 +25,9 @@ public class CourierLoginTest {
     public void loginCourierSuccess() {
         CourierLogin login = new CourierLogin(courier.getLogin(), courier.getPassword() );
         Response response = ApiSteps.loginCourier(login);
-        response.then().assertThat().body("id", notNullValue())
+        response.then().assertThat().statusCode(200)
                 .and()
-                .statusCode(200);
+                .body("id", notNullValue());
     }
 
     @Test
@@ -37,18 +35,18 @@ public class CourierLoginTest {
     public void loginCourierNoPassword() {
         CourierLogin login = new CourierLogin(courier.getLogin(), "");
         Response response = ApiSteps.loginCourier(login);
-        response.then().assertThat().body("message", equalTo("Недостаточно данных для входа"))
+        response.then().assertThat().statusCode(400)
                 .and()
-                .statusCode(400);
+                .body("message", equalTo("Недостаточно данных для входа"));
     }
     @Test
     @DisplayName("Авторизация без логина")
     public void loginCourierNoLogin() {
         CourierLogin login = new CourierLogin("", courier.getPassword());
         Response response = ApiSteps.loginCourier(login);
-        response.then().assertThat().body("message", equalTo("Недостаточно данных для входа"))
+        response.then().assertThat().statusCode(400)
                 .and()
-                .statusCode(400);
+                .body("message", equalTo("Недостаточно данных для входа"));
     }
 
     @Test
@@ -56,9 +54,9 @@ public class CourierLoginTest {
     public void loginCourierNonExistentUser() {
         CourierLogin login = new CourierLogin( "LOGIN_NON_EXISTENT", courier.getPassword());
         Response response = ApiSteps.loginCourier(login);
-        response.then().assertThat().body("message", equalTo("Учетная запись не найдена"))
+        response.then().assertThat().statusCode(404)
                 .and()
-                .statusCode(404);
+                .body("message", equalTo("Учетная запись не найдена"));
     }
 
     @Test
@@ -66,14 +64,16 @@ public class CourierLoginTest {
     public void loginCourierWrongPassword() {
         CourierLogin login = new CourierLogin(courier.getLogin(), "PASSWORD_NON_EXISTENT");
         Response response = ApiSteps.loginCourier(login);
-        response.then().assertThat().body("message", equalTo("Учетная запись не найдена"))
+        response.then().assertThat().statusCode(404)
                 .and()
-                .statusCode(404);
+                .body("message", equalTo("Учетная запись не найдена"));
     }
 
     @After
-    public void cleanUp() {
-        int id = ApiSteps.getCourierIDbyLogin(courier.getLogin(), courier.getPassword());
-        ApiSteps.deleteCourierByID(id);
+    public void cleanUp(){
+        if (courier.getLogin() != null && courier.getPassword() != null) {
+            int id = ApiSteps.getCourierIDbyLogin(courier.getLogin(), courier.getPassword());
+            ApiSteps.deleteCourierByID(id);
+        }
     }
 }

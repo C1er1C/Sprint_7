@@ -1,6 +1,7 @@
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import example.NewOrder;
+import example.ApiSteps;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +26,7 @@ public class CreateOrderTest {
 
     @Before
     public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru/";
+        RestAssured.baseURI = ApiSteps.baseURL;
     }
 
     public CreateOrderTest(String firstName, String lastName, String address, String metroStation,
@@ -42,7 +43,7 @@ public class CreateOrderTest {
         this.color =color;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Данные для заказа. Тестовые данные: {0} {1} {2}")
     public static Object[][] getDataForm() {
         String[] oneColor = new String[] {"BLACK"};
         String[] twoColors = new String[] {"BLACK", "GREY"};

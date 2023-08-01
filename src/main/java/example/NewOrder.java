@@ -1,5 +1,4 @@
 package example;
-
 public class NewOrder {
     private String firstName;
     private String lastName;
@@ -10,7 +9,6 @@ public class NewOrder {
     private String deliveryDate;
     private String comment;
     private String[] color;
-
     public NewOrder(String firstName, String lastName, String address, String metroStation, String phone,
                     int rentTime, String deliveryDate, String comment, String[] color) {
         this.firstName = firstName;
@@ -23,45 +21,34 @@ public class NewOrder {
         this.comment = comment;
         this.color =color;
     }
-
     public NewOrder() {}
-
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
     public String getAddress() {
         return address;
     }
-
     public void setAddress(String address) {
         this.address = address;
     }
-
     public String getMetroStation() {
         return metroStation;
     }
-
     public void setMetroStation(String metroStation) {
         this.metroStation = metroStation;
     }
-
     public String getPhone() {
         return phone;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
