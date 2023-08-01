@@ -25,8 +25,8 @@ public class OrderListTest {
                         .header("Content-type", "application/json")
                         .get("/api/v1/orders");
 
-        response.then().assertThat().body("orders", notNullValue())
+        response.then().assertThat().statusCode(200)
                 .and()
-                .statusCode(200);
+                .body("orders", notNullValue());
     }
 }

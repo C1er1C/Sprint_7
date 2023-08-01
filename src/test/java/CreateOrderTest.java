@@ -68,8 +68,8 @@ public class CreateOrderTest {
                         .when()
                         .post("/api/v1/orders");
 
-        response.then().assertThat().body("track", notNullValue())
+        response.then().assertThat().statusCode(201)
                 .and()
-                .statusCode(201);
+                .body("track", notNullValue());
     }
 }
